@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>三级联动</title>
+</head>
+<body>
+<h2>三级联动：</h2>
+<form action="#">
+    <select name="prov" id="prov">
+        <option value="0">请选择省</option>
+    </select>
+    <select name="city" id="city">
+        <option value="0">请选择市</option>
+    </select>
+    <select name="county" id="county">
+        <option value="0">请选择县</option>
+    </select>
+</form>
+
+<script src="../js/jquery1.42.min.js"></script>
+<script src="../js/msgList.js"></script>
+<script>
+    $(function(){
+        var prov = $('#prov');
+        var city = $('#city');
+        var county = $('#county');
+
+        setProv ();
+        provEvent ();
+        cityEvent ();
+
+        function setProv () {
+            var _proStr = '<option value="0">请选择省</option>';
+            for (var i = 0, l = PRO.length; i < l; i++) {
+                _proStr += '<option value="' + PRO[i].ProID+ '">' + PRO[i].name+ '</option>'
+            }
+            prov.html(_proStr);
+        }
+        function cityEvent () {
+            city.change(function(){
+                var val = Number($(this).val());
+                var countys = getCountyByCityId(val);
+                var _countyStr = '<option value="0">请选择县</option>';
+                for (var i = 0, l = countys.length; i < l; i++) {
+                    _countyStr += '<option value="' + countys[i].Id+ '">' + countys[i].DisName+ '</option>'
+                }
+                county.html(_countyStr);
+            });
+        }
+        function provEvent () {
+            prov.change(function(){
+                var val = Number($(this).val());
+                var citys = getCitysByProId(val);
+                var _cityStr = '<option value="0">请选择市</option>';
+                for (var i = 0, l = citys.length; i < l; i++) {
+                    _cityStr += '<option value="' + citys[i].CityID+ '">' + citys[i].name+ '</option>'
+                }
+                city.html(_cityStr);
+                var _countyStr = '<option value="0">请选择县</option>';
+                county.html(_countyStr);
+            });
+        }
+    })
+</script>
+</body>
+</html>
